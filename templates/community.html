@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Community — CompAI (Dark)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Community page — dark theme" />
+</head>
+<body class="antialiased bg-slate-900 text-slate-100">
+    <!-- NAVBAR -->
+  <header class="bg-slate-800 shadow-sm sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold">AI</div>
+        <div>
+          <h1 class="text-lg font-semibold text-white">MindfulAI</h1>
+          <p class="text-xs text-slate-400 -mt-1">Personal mental wellness companion</p>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="/" class="hover:text-indigo-400">Home</a>
+        <a href="/community" class="hover:text-indigo-400">Community</a>
+        <a href="/journal" class="hover:text-indigo-400">Journal</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="/predict" class="hidden md:inline-block px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700">Get started</a>
+        <button class="md:hidden p-2 rounded-md bg-slate-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 5h14a1 1 0 010 2H3a1 1 0 110-2zm0 4h14a1 1 0 010 2H3a1 1 0 110-2zm0 4h14a1 1 0 010 2H3a1 1 0 110-2z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+<div id="mobileMenu" class="md:hidden hidden bg-slate-800 px-6 py-4 space-y-2 transition-all duration-300">
+  <a href="/" class="block text-white hover:text-indigo-400">Home</a>
+  <a href="/community" class="block text-white hover:text-indigo-400">Community</a>
+  <a href="/journal" class="block text-white hover:text-indigo-400">Journal</a>
+  <a href="/predict" class="block text-white hover:text-indigo-400">Get Started</a>
+</div>
+
+
+  <main class="min-h-screen flex items-start justify-center py-12 px-4">
+    <section class="w-full max-w-4xl bg-slate-800 rounded-2xl shadow p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-xl font-semibold">Community Feed</h1>
+        <div class="text-sm text-slate-400">Be kind — this is a supportive space</div>
+      </div>
+
+      <!-- New post -->
+      <form id="postForm" class="space-y-3 mb-6">
+        <input name="name" placeholder="Display name" class="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+        <textarea name="post" rows="3" placeholder="Share something — a thought, tip, or support message" class="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white"></textarea>
+        <div class="flex justify-between items-center">
+          <div class="text-xs text-slate-400">Posts are public in this demo (stored in localStorage).</div>
+          <button type="button" id="publishPost" class="px-4 py-2 rounded-md bg-indigo-600 text-white">Publish</button>
+        </div>
+      </form>
+
+      <!-- Posts -->
+      <div id="posts" class="space-y-4">
+        <!-- JS renders posts here -->
+      </div>
+
+      <div class="mt-6 text-xs text-slate-500">This demo stores posts locally in your browser. For a real app, you'd connect a backend and moderation flow.</div>
+    </section>
+  </main>
+
+    <script>
+  const burgerBtn = document.querySelector('header button');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  burgerBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+});
+
+  });
+</script>
+
+  <script>
+    // Simple localStorage-backed community feed demo
+    const postForm = document.getElementById('postForm');
+    const publishBtn = document.getElementById('publishPost');
+    const postsEl = document.getElementById('posts');
+
+    function loadPosts() {
+      const raw = localStorage.getItem('mindfulai_posts') || '[]';
+      try { return JSON.parse(raw); } catch(e) { return []; }
+    }
+    function savePosts(list) { localStorage.setItem('mindfulai_posts', JSON.stringify(list)); }
+
+    function renderPosts() {
+      const list = loadPosts().slice().reverse();
+      postsEl.innerHTML = '';
+      if (list.length === 0) {
+        postsEl.innerHTML = '<div class="text-sm text-slate-400">No posts yet — be the first to share.</div>';
+        return;
+      }
+      list.forEach((p, i) => {
+        const d = new Date(p.t || Date.now());
+        const card = document.createElement('article');
+        card.className = 'p-4 bg-slate-900 rounded-md shadow-sm';
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold">${escapeHtml(p.name || 'Anonymous')}</div>
+              <div class="text-xs text-slate-400">${d.toLocaleString()}</div>
+            </div>
+            <div class="flex gap-2">
+              <button data-i="${i}" class="likeBtn px-2 py-1 text-xs rounded-md border border-slate-700">Like</button>
+              <button data-i="${i}" class="deleteBtn px-2 py-1 text-xs rounded-md border border-red-600 text-red-400">Delete</button>
+            </div>
+          </div>
+          <p class="mt-3 text-slate-300 whitespace-pre-wrap">${escapeHtml(p.post || '')}</p>
+        `;
+        postsEl.appendChild(card);
+      });
+
+      document.querySelectorAll('.deleteBtn').forEach(btn => btn.addEventListener('click', (e) => {
+        const i = Number(e.currentTarget.dataset.i);
+        const list = loadPosts(); list.splice(list.length - 1 - i, 1);
+        savePosts(list); renderPosts();
+      }));
+
+      document.querySelectorAll('.likeBtn').forEach(btn => btn.addEventListener('click', (e) => {
+        const i = Number(e.currentTarget.dataset.i);
+        const list = loadPosts(); const idx = list.length - 1 - i;
+        list[idx].likes = (list[idx].likes || 0) + 1; savePosts(list); renderPosts();
+      }));
+    }
+
+    publishBtn.addEventListener('click', () => {
+      const name = postForm.name.value.trim();
+      const post = postForm.post.value.trim();
+      if (!post) return alert('Please write something to post.');
+      const list = loadPosts(); list.push({ name, post, t: Date.now(), likes: 0 }); savePosts(list); postForm.reset(); renderPosts();
+    });
+
+    function escapeHtml(s) { return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    renderPosts();
+  </script>
+
+    <!-- FOOTER -->
+  <footer class="bg-slate-800 border-t border-slate-700 mt-10">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400">
+      <div>© <span id="year"></span> MindfulAI — Built with ❤️</div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-indigo-400">Privacy</a>
+        <a href="#" class="hover:text-indigo-400">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

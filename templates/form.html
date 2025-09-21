@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Mental Health — Frontend (Dark Theme)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="AI Mental Health — sample frontend built with HTML & Tailwind CSS in dark theme" />
+</head>
+<body class="antialiased text-slate-100 bg-slate-900">
+  <!-- NAVBAR -->
+  <header class="bg-slate-800 shadow-sm sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold">AI</div>
+        <div>
+          <h1 class="text-lg font-semibold text-white">MindfulAI</h1>
+          <p class="text-xs text-slate-400 -mt-1">Personal mental wellness companion</p>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="/" class="hover:text-indigo-400">Home</a>
+        <a href="#features" class="hover:text-indigo-400">Features</a>
+        <a href="/community" class="block text-white hover:text-indigo-400">Community</a>
+        <a href="/journal" class="block text-white hover:text-indigo-400">Journal</a>
+        <a href="#contact" class="hover:text-indigo-400">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="/predict" class="hidden md:inline-block px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700">Start check-in</a>
+        <button class="md:hidden p-2 rounded-md bg-slate-700" aria-label="menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 5h14a1 1 0 010 2H3a1 1 0 110-2zm0 4h14a1 1 0 010 2H3a1 1 0 110-2zm0 4h14a1 1 0 010 2H3a1 1 0 110-2z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+<div id="mobileMenu" class="md:hidden hidden bg-slate-800 px-6 py-4 space-y-2 transition-all duration-300">
+  <a href="#features" class="block text-white hover:text-indigo-400">Home</a>
+  <a href="#how" class="block text-white hover:text-indigo-400">Features</a>
+  <a href="/community" class="block text-white hover:text-indigo-400">Community</a>
+  <a href="/journal" class="block text-white hover:text-indigo-400">Journal</a>
+  <a href="#contact" class="block text-white hover:text-indigo-400">Contact</a>
+</div>
+
+
+   <!-- TOGGLE BUTTON -->
+  <div class="text-center my-10">
+    <button onclick="toggleHow()" class="px-6 py-3 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition">
+      See how it works
+    </button>
+  </div>
+
+
+    <!-- HOW IT WORKS (hidden by default) -->
+  <section id="how" class="max-w-6xl mx-auto px-6 py-14 hidden">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h3 class="text-2xl font-semibold text-white">How it works</h3>
+        <ol class="mt-6 space-y-4 text-slate-300">
+          <li><span class="font-medium">1.</span> Quick mood check-ins help the system understand current state.</li>
+          <li><span class="font-medium">2.</span> Personalized suggestions and exercises are recommended.</li>
+          <li><span class="font-medium">3.</span> Track progress and export reports to share with professionals if desired.</li>
+        </ol>
+      </div>
+      <div class="p-6 bg-slate-800 rounded-xl shadow-sm">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <div class="text-xs text-slate-400">Weekly summary</div>
+            <div class="text-lg font-semibold text-white">You felt calmer</div>
+            <div class="text-sm text-slate-400">Consistent breathing practice improved your average mood score.</div>
+          </div>
+          <div class="flex items-center justify-center">
+            <div class="w-24 h-24 rounded-full bg-indigo-950 grid place-items-center">
+              <div class="text-2xl font-bold text-white">7.8</div>
+              <div class="text-xs text-slate-400">avg mood</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- QUESTIONNAIRE PAGE / PREDICT (TEXT INPUTS) -->
+  <section id="questionnaire" class="max-w-4xl mx-auto px-6 py-1">
+    <div class="bg-slate-800 rounded-2xl shadow p-8">
+      <h3 class="text-2xl font-semibold text-white mb-4">Track our Mental Health</h3>
+      <p class="text-slate-400 mb-6">Answer the questions.</p>
+
+      <form id="phqForm" class="space-y-4" action="/predict" method="post">
+        <div class="space-y-3">
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">1. Do you have little interest or pleasure in doing things?</label>
+            <input type="text" name="q1" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">2. Do you feel down, depressed, or hopeless?</label>
+            <input type="text" name="q2" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">3. Do you have trouble falling or staying asleep, or do you sleep too much?</label>
+            <input type="text" name="q3" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">4. Do you feel tired or have little energy?</label>
+            <input type="text" name="q4" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">5. Do you have poor appetite or tend to overeat?</label>
+            <input type="text" name="q5" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">6. Do you feel bad about yourself or that you are a failure or have let yourself or your family down?</label>
+            <input type="text" name="q6" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">7. Do you have trouble concentrating on things, such as reading, work, or watching television?</label>
+            <input type="text" name="q7" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">8. Have you been moving or speaking so slowly that other people have noticed, or the opposite—being fidgety or restless?</label>
+            <input type="text" name="q8" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg">
+            <label class="block text-slate-200 font-medium">9. Have you had thoughts of self-harm or felt that you would be better off dead?</label>
+            <input type="text" name="q9" class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-white" placeholder="Type your answer here" />
+          </div>
+        </div>
+
+
+
+        <div class="flex gap-3 mt-4">
+          <button id="submitBtn" class="px-4 py-2 rounded-md bg-indigo-600 text-white" type="submit">Submit</button>
+          <button id="clearBtn" type="reset" class="px-4 py-2 rounded-md border border-slate-700 text-slate-300">Clear</button>
+        </div>
+         </div>
+        </div>
+      </form>
+
+      <div id="resultCard" class="mt-6 p-4 bg-slate-800 rounded-lg shadow hidden">
+    <div class="flex justify-between items-center">
+        <h3 class="text-xl font-bold text-white">Severity Score</h3>
+        <span id="scoreText" class="text-2xl font-bold text-indigo-400"></span>
+    </div>
+    <div class="mt-4 w-full bg-slate-700 rounded-full h-4">
+        <div id="progressBar" class="bg-indigo-600 h-4 rounded-full transition-all duration-1000 ease-out" style="width:0%;"></div>
+    </div>
+    <p id="resultAdvice" class="mt-4 text-slate-400"></p>
+</div>
+
+    </div>
+  </section>
+
+  
+
+<script>
+    const form = document.getElementById('phqForm');
+    const resultCard = document.getElementById('resultCard');
+    const scoreText = document.getElementById('scoreText');
+    const progressBar = document.getElementById('progressBar');
+    const resultAdvice = document.getElementById('resultAdvice');
+    const submitBtn = document.getElementById('submitBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function adviceForScore(score) {
+        if (score >= 20) return 'Severe symptoms — please consider contacting a healthcare professional right away.';
+        if (score >= 15) return 'Moderately severe symptoms — reaching out to a professional is recommended.';
+        if (score >= 10) return 'Moderate symptoms — consider talking with someone you trust or a professional.';
+        if (score >= 5) return 'Mild symptoms — self-care and monitoring may help; consider reaching out if it worsens.';
+        return 'Minimal symptoms — continue self-monitoring.';
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        const formData = new FormData(form);
+        const data = new URLSearchParams(formData);
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: data,
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            const score = result.severity_score;
+
+            // Update text and advice
+            scoreText.textContent = score.toFixed(2);
+            resultAdvice.textContent = adviceForScore(score);
+
+            // Calculate progress bar width based on a max score of 27 (the PHQ-9 scale's max total)
+            const maxScore = 27;
+            const percentage = Math.min(100, (score / maxScore) * 100);
+
+            // Animate the progress bar
+            resultCard.classList.remove('hidden');
+            setTimeout(() => {
+                progressBar.style.width = `${percentage}%`;
+            }, 100); // Small delay for animation
+
+        } catch (err) {
+            console.error('Failed to get a valid response:', err);
+            scoreText.textContent = 'Error';
+            resultAdvice.textContent = 'Could not retrieve score. Please try again.';
+            resultCard.classList.remove('hidden');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit';
+        }
+    });
+
+    clearBtn.addEventListener('click', () => {
+        form.reset();
+        resultCard.classList.add('hidden');
+        progressBar.style.width = '0%'; // Reset the bar on clear
+    });
+</script>
+
+    <!-- FEATURES -->
+  <section id="features" class="bg-slate-900 py-14">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-10">
+        <h3 class="text-2xl font-semibold text-white">Features that help, without judgement</h3>
+        <p class="text-slate-400 mt-2">Designed with clinicians and privacy-first principles.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 bg-slate-800 rounded-xl shadow-sm">
+          <div class="text-indigo-400 mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 11V3m0 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+          </div>
+          <h4 class="font-semibold text-white">Conversational check-ins</h4>
+          <p class="text-sm text-slate-400 mt-2">Short guided conversations that help reflect on what's going on, available 24/7.</p>
+        </div>
+
+        <div class="p-6 bg-slate-800 rounded-xl shadow-sm">
+          <div class="text-indigo-400 mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h4l3 9 4-18 3 9h4"/></svg>
+          </div>
+          <h4 class="font-semibold text-white">Mood tracking</h4>
+          <p class="text-sm text-slate-400 mt-2">Daily logging and visual trends to help spot patterns over time.</p>
+        </div>
+
+        <div class="p-6 bg-slate-800 rounded-xl shadow-sm">
+          <div class="text-indigo-400 mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c1.657 0 3 1.567 3 3.5S13.657 15 12 15s-3-1.567-3-3.5S10.343 8 12 8z"/></svg>
+          </div>
+          <h4 class="font-semibold text-white">Guided exercises</h4>
+          <p class="text-sm text-slate-400 mt-2">Breathing, grounding, and short CBT-inspired activities to use anytime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- CONTACT / CTA -->
+  <section id="contact" class="max-w-6xl mx-auto px-6 py-14">
+    <div class="bg-slate-800 rounded-2xl shadow p-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+      <div>
+        <h3 class="text-2xl font-semibold text-white">Start a free check-in</h3>
+        <p class="mt-2 text-slate-300">No signup required — sample the conversational check-in and see personalized suggestions.</p>
+
+        <ul class="mt-4 space-y-2 text-sm text-slate-400">
+          <li>• Confidential & private</li>
+          <li>• Short exercises you can do in 5 minutes</li>
+        </ul>
+      </div>
+
+      <form class="space-y-4" onsubmit="event.preventDefault(); alert('This is a static demo frontend');">
+        <div>
+          <label class="block text-sm text-slate-300">Name (optional)</label>
+          <input type="text" class="mt-1 block w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="Your name" />
+        </div>
+        <div>
+          <label class="block text-sm text-slate-300">Email (optional)</label>
+          <input type="email" class="mt-1 block w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="you@example.com" />
+        </div>
+        <div class="flex gap-3">
+          <button class="flex-1 px-4 py-2 rounded-md bg-indigo-600 text-white">Start check-in</button>
+          <button class="flex-1 px-4 py-2 rounded-md border border-slate-700 text-slate-300">Demo</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+ <script>
+  const burgerBtn = document.querySelector('header button');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  burgerBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+});
+
+  });
+</script>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-800 border-t border-slate-700 mt-10">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400">
+      <div>© <span id="year"></span> MindfulAI — Built with ❤️</div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-indigo-400">Privacy</a>
+        <a href="#" class="hover:text-indigo-400">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+     function toggleHow() {
+      const section = document.getElementById("how");
+      section.classList.toggle("hidden");
+    }
+  </script>
+
+</body>
+</html>

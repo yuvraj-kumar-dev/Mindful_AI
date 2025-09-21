@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Journal — MindfulAI (Dark)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Personal journal page — dark theme" />
+</head>
+<body class="antialiased bg-slate-900 text-slate-100">
+   <!-- NAVBAR -->
+  <header class="bg-slate-800 shadow-sm sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold">AI</div>
+        <div>
+          <h1 class="text-lg font-semibold text-white">MindfulAI</h1>
+          <p class="text-xs text-slate-400 -mt-1">Personal mental wellness companion</p>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="/" class="hover:text-indigo-400">Home</a>
+        <a href="/community" class="hover:text-indigo-400">Community</a>
+        <a href="/journal" class="hover:text-indigo-400">Journal</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="/predict" class="hidden md:inline-block px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700">Get started</a>
+        <button class="md:hidden p-2 rounded-md bg-slate-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 5h14a1 1 0 010 2H3a1 1 0 110-2zm0 4h14a1 1 0 010 2H3a1 1 0 110-2zm0 4h14a1 1 0 010 2H3a1 1 0 110-2z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+<div id="mobileMenu" class="md:hidden hidden bg-slate-800 px-6 py-4 space-y-2 transition-all duration-300">
+  <a href="#features" class="block text-white hover:text-indigo-400">Features</a>
+  <a href="#how" class="block text-white hover:text-indigo-400">How it works</a>
+  <a href="/community" class="block text-white hover:text-indigo-400">Community</a>
+  <a href="/journal" class="block text-white hover:text-indigo-400">Journal</a>
+  <a href="#contact" class="block text-white hover:text-indigo-400">Contact</a>
+</div>
+
+  <main class="min-h-screen flex items-start justify-center py-12 px-4">
+    <section class="w-full max-w-4xl bg-slate-800 rounded-2xl shadow p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-xl font-semibold">My Journal</h1>
+        <div class="text-sm text-slate-400">All entries are private</div>
+      </div>
+
+      <!-- New entry form -->
+      <form id="entryForm" class="space-y-3 mb-6">
+        <input name="title" placeholder="Title (optional)" class="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+        <textarea name="content" rows="4" placeholder="Write about your day, feelings, or anything on your mind..." class="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white"></textarea>
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-slate-400">Tip: write freely — entries are stored locally in this demo.</div>
+          <div class="flex gap-2">
+            <button type="button" id="saveEntry" class="px-4 py-2 rounded-md bg-indigo-600 text-white">Save entry</button>
+            <button type="button" id="clearEntry" class="px-4 py-2 rounded-md border border-slate-700 text-slate-300">Clear</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Entries list -->
+      <div>
+        <h2 class="text-lg font-medium mb-3">Recent entries</h2>
+        <div id="entries" class="space-y-4">
+          <!-- JS will populate entries here -->
+        </div>
+      </div>
+
+      <div class="mt-6 text-xs text-slate-500">Journal data is stored in your browser (localStorage) in this demo. No data is sent to a server.</div>
+    </section>
+  </main>
+
+   <script>
+  const burgerBtn = document.querySelector('header button');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  burgerBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+});
+
+  });
+</script>
+  
+
+  <script>
+    // Simple localStorage-backed journal demo
+    const entryForm = document.getElementById('entryForm');
+    const saveBtn = document.getElementById('saveEntry');
+    const clearBtn = document.getElementById('clearEntry');
+    const entriesEl = document.getElementById('entries');
+
+    function loadEntries() {
+      const raw = localStorage.getItem('mindfulai_journal') || '[]';
+      try {
+        return JSON.parse(raw);
+      } catch(e) { return []; }
+    }
+
+    function saveEntries(list) {
+      localStorage.setItem('mindfulai_journal', JSON.stringify(list));
+    }
+
+    function renderEntries() {
+      const list = loadEntries().slice().reverse(); // newest first
+      entriesEl.innerHTML = '';
+      if (list.length === 0) {
+        entriesEl.innerHTML = '<div class="text-sm text-slate-400">No entries yet — write your first one above.</div>';
+        return;
+      }
+      list.forEach((it, idx) => {
+        const d = new Date(it.t || Date.now());
+        const card = document.createElement('article');
+        card.className = 'p-4 bg-slate-900 rounded-md shadow-sm';
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold">${escapeHtml(it.title || 'Untitled')}</div>
+              <div class="text-xs text-slate-400">${d.toLocaleString()}</div>
+            </div>
+            <div class="flex gap-2">
+              <button data-idx="${idx}" class="editEntry px-2 py-1 text-xs rounded-md border border-slate-700">Edit</button>
+              <button data-idx="${idx}" class="deleteEntry px-2 py-1 text-xs rounded-md border border-red-600 text-red-400">Delete</button>
+            </div>
+          </div>
+          <p class="mt-3 text-slate-300 whitespace-pre-wrap">${escapeHtml(it.content || '')}</p>
+        `;
+        entriesEl.appendChild(card);
+      });
+
+      // wire buttons
+      document.querySelectorAll('.deleteEntry').forEach(btn => btn.addEventListener('click', (e) => {
+        const i = Number(e.currentTarget.dataset.idx);
+        let list = loadEntries(); list.splice(list.length - 1 - i, 1); // because reversed
+        saveEntries(list); renderEntries();
+      }));
+      document.querySelectorAll('.editEntry').forEach(btn => btn.addEventListener('click', (e) => {
+        const i = Number(e.currentTarget.dataset.idx);
+        const list = loadEntries();
+        const item = list[list.length - 1 - i];
+        if (item) {
+          entryForm.title.value = item.title || '';
+          entryForm.content.value = item.content || '';
+          // remove item so save will replace
+          list.splice(list.length - 1 - i, 1);
+          saveEntries(list);
+          renderEntries();
+        }
+      }));
+    }
+
+    function escapeHtml(s) {
+      return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    }
+
+    saveBtn.addEventListener('click', () => {
+      const title = entryForm.title.value.trim();
+      const content = entryForm.content.value.trim();
+      if (!content) return alert('Please write something in your entry.');
+      const list = loadEntries();
+      list.push({ title, content, t: Date.now() });
+      saveEntries(list);
+      entryForm.reset();
+      renderEntries();
+    });
+
+    clearBtn.addEventListener('click', () => entryForm.reset());
+
+    renderEntries();
+  </script>
+
+    <!-- FOOTER -->
+  <footer class="bg-slate-800 border-t border-slate-700 mt-10">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400">
+      <div>© <span id="year"></span> MindfulAI — Built with ❤️</div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-indigo-400">Privacy</a>
+        <a href="#" class="hover:text-indigo-400">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+</html>
